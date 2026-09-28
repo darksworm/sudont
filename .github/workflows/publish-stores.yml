@@ -206,11 +206,11 @@ jobs:
             --data-binary "@sudont-${VERSION}.zip" \
             "https://chromewebstore.googleapis.com/upload/v2/publishers/${CHROME_PUBLISHER_ID}/items/${CHROME_EXTENSION_ID}:upload")
           printf '%s\n' "$response"
+          state=$(python3 -c 'import json, sys; print(json.load(sys.stdin).get("uploadState", ""))' <<<"$response")
           for attempt in {1..60}; do
-            state=$(python3 -c 'import json, sys; print(json.load(sys.stdin).get("uploadState", ""))' <<<"$response")
             case "$state" in
               SUCCEEDED) break ;;
-              UPLOAD_IN_PROGRESS)
+              IN_PROGRESS)
                 if [ "$attempt" -eq 60 ]; then
                   echo 'Chrome upload processing timed out' >&2
                   exit 1
@@ -220,6 +220,7 @@ jobs:
                   -H "Authorization: Bearer $ACCESS_TOKEN" \
                   "https://chromewebstore.googleapis.com/v2/publishers/${CHROME_PUBLISHER_ID}/items/${CHROME_EXTENSION_ID}:fetchStatus")
                 printf '%s\n' "$response"
+                state=$(python3 -c 'import json, sys; print(json.load(sys.stdin).get("lastAsyncUploadState", ""))' <<<"$response")
                 ;;
               *)
                 printf 'Chrome upload did not succeed: %s\n' "$state" >&2
