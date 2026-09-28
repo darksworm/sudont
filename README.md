@@ -66,8 +66,10 @@ enable Developer mode, "Load unpacked") or in Firefox
 Run the **publish-stores** workflow from the GitHub Actions page. Enter an
 existing GitHub release tag and select Firefox, Chrome, or both. The workflow
 downloads that release's ZIP files and submits them for store review without
-rebuilding or comparing their contents. Firefox receives the GitHub release notes and source archive as
-part of its submission. Chrome does not provide an API for release notes, so
+rebuilding from source or comparing their contents. For Chrome, the workflow
+rewrites the manifest to use a background service worker and repackages the ZIP
+without source maps. Firefox receives the GitHub release notes and source
+archive as part of its submission. Chrome does not provide an API for release notes, so
 the GitHub release remains its changelog.
 
 Create a `browser-stores` GitHub environment with these secrets:
