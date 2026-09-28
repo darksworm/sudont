@@ -74,7 +74,9 @@ Create a `browser-stores` GitHub environment with these secrets:
 
 - `AMO_JWT_ISSUER` and `AMO_JWT_SECRET`, from the Firefox Add-ons API keys page.
 - `CHROME_SERVICE_ACCOUNT_JSON`, for a Google service account linked to the
-  Chrome Web Store publisher account.
+  Chrome Web Store publisher account. Grant the service account
+  `roles/iam.serviceAccountTokenCreator` on itself so it can create access
+  tokens. Enable the Chrome Web Store API in its Google Cloud project.
 
 Add `CHROME_EXTENSION_ID` and `CHROME_PUBLISHER_ID` as environment variables.
 The extension listings must already exist in both stores. Store review and
